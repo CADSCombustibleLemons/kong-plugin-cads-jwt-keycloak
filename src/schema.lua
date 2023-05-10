@@ -9,7 +9,7 @@ return {
         fields = {
           { algorithm = { type = "string", default = "RS256" }, },
           { allowed_iss = { type = "set", elements = { type = "string" }, required = true }, },
-          { anonymous = { type = "string", uuid = true, legacy = true }, },
+          { anonymous = { type = "string", uuid = true }, },
           { claims_to_verify = { type = "set", elements = { type = "string", one_of = { "exp", "nbf" }, }, default = { "exp" } }, },
           { client_roles = { type = "set", elements = { type = "string" }, default = nil }, },
           { consumer_match = { type = "boolean", default = false }, },
