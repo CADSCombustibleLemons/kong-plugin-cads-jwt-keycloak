@@ -87,7 +87,7 @@ def create_api(config, expected_response=CREATED):
             assert r.status_code == expected_response
             kwargs["api_endpoint"] = KONG_API + "/" + api_name
             print(kwargs["api_endpoint"])
-            time.sleep(2)
+            time.sleep(5)
             result = func(*args, **kwargs)
             return result
 
@@ -141,9 +141,13 @@ def call_api(token=None, method="get", params=None, endpoint=None):
 def create_client(client_id, **kwargs):
     id = str(uuid.uuid4())
 
+    print(f"id: {id}")
     if client_id is None:
         client_id = str(uuid.uuid4())
 
+    print(f"client_id: {client_id}")
+    print(f"create_consumer: {kwargs.get('create_consumer')}")
+    print(f"KC_ADMIN_TOKEN: {KC_ADMIN_TOKEN}")
     if kwargs.get("create_consumer"):
         client_id = create_consumer(client_id, **kwargs)
     client_secret = str(uuid.uuid4())
