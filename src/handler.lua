@@ -198,15 +198,16 @@ local function set_consumer(consumer, credential, token)
         ngx.ctx.authenticated_jwt_token = token  -- backward compatibilty only
 
         if credential.username then
-            set_header(constants.HEADERS.CREDENTIAL_USERNAME, credential.username)
+            set_header(constants.HEADERS.CREDENTIAL_IDENTIFIER, credential.username)
         else
-            clear_header(constants.HEADERS.CREDENTIAL_USERNAME)
+            clear_header(constants.HEADERS.CREDENTIAL_IDENTIFIER)
         end
 
         clear_header(constants.HEADERS.ANONYMOUS)
 
     else
-        clear_header(constants.HEADERS.CREDENTIAL_USERNAME)
+        kong.log.debug('constants.headers.CREDENTIAL_IDENTIFIER:' .. constants.HEADERS.CREDENTIAL_IDENTIFIER)
+        clear_header(constants.HEADERS.CREDENTIAL_IDENTIFIER)
         set_header(constants.HEADERS.ANONYMOUS, true)
     end
 end
@@ -333,8 +334,6 @@ end
 
 
 function JwtKeycloakHandler:access(conf)
-    JwtKeycloakHandler.super.access(self)
-
     -- check if preflight request and whether it should be authenticated
     if not conf.run_on_preflight and kong.request.get_method() == "OPTIONS" then
         return
