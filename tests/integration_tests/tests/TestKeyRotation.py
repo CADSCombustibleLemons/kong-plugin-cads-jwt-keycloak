@@ -43,7 +43,7 @@
 #         self.call_api(token_1, OK)
 
 #         new_key_1 = kc_add_key('new_key_1', 120)
-#         time.sleep(5)
+#         time.sleep(1)
 
 #         token_2 = self.get_token()
 
@@ -52,7 +52,7 @@
 
 #         kc_add_key('new_key_2', 130)
 #         kc_delete_key(new_key_1)
-#         time.sleep(5)
+#         time.sleep(1)
 
 #         token_3 = self.get_token()
 

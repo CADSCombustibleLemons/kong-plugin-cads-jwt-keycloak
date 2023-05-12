@@ -47,7 +47,7 @@ def ensure_plugin():
             data={"iss": KC_REALM, "public_key": get_kc_public_key(KC_REALM)},
         )
         assert r.status_code == CREATED
-    time.sleep(5)
+    time.sleep(0.5)
 
 
 def create_consumer(client_id, **kwargs):
@@ -56,14 +56,14 @@ def create_consumer(client_id, **kwargs):
         KONG_ADMIN + "/consumers", json={"username": client_id, "custom_id": custom_id}
     )
     assert r.status_code == CREATED or r.status_code == 409
-    time.sleep(5)
+    time.sleep(0.5)
     return kwargs.get("custom_id", r.json()["id"])
 
 
 def delete_consumer(client_id):
     r = requests.delete(KONG_ADMIN + "/consumers/" + client_id)
     assert r.status_code == NO_CONTENT
-    time.sleep(5)
+    time.sleep(0.5)
 
 
 def create_api(config, expected_response=CREATED):
@@ -87,7 +87,7 @@ def create_api(config, expected_response=CREATED):
             assert r.status_code == expected_response
             kwargs["api_endpoint"] = KONG_API + "/" + api_name
             print(kwargs["api_endpoint"])
-            time.sleep(5)
+            time.sleep(2)
             result = func(*args, **kwargs)
             return result
 
@@ -129,7 +129,7 @@ def call_api(token=None, method="get", params=None, endpoint=None):
             # print(e)
             # print(headers)
             r = requests.request(method, e, params=params, headers=headers)
-            print(r.json())
+            # print(r.json())
             result = func(*args, r.status_code, r.json())
             return result
 
@@ -161,7 +161,7 @@ def create_client(client_id, **kwargs):
             "enabled": True,
         },
     )
-
+    print(f"create client status code: {r.status_code}")
     assert r.status_code == 201
 
     r = requests.post(
