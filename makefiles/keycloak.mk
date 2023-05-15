@@ -12,7 +12,7 @@ keycloak-start:
 	-e KEYCLOAK_USER=${KEYCLOAK_ADMIN_USER} \
 	-e KEYCLOAK_PASSWORD=${KEYCLOAK_ADMIN_PASS} \
 	${KEYCLOAK_IMAGE}
-	@bash -c 'while ! timeout 1 bash -c "echo > /dev/tcp/localhost/8080"; do sleep 1; done'
+	@bash -c 'while ! timeout 2 bash -c "echo > /dev/tcp/localhost/8080"; do sleep 2; done'
 
 keycloak-stop:
 	@echo "Stopping Keycloak"

@@ -13,7 +13,7 @@ class TestConsumerMapping(unittest.TestCase):
     @authenticate(create_consumer=True)
     @call_api()
     def test_map_consumer(self, status, body):
-        print(f"response status {status}")
+        # print(f"response status {status}")
         # print(body)
         self.assertEqual(OK, status)
         self.assertEqual(
@@ -37,7 +37,7 @@ class TestConsumerMapping(unittest.TestCase):
     @authenticate(create_consumer=True, custom_id=TMP_CUSTOM_ID)
     @call_api()
     def test_map_consumer_custom_id(self, status, body):
-        print(f"response status {status}")
+        # print(f"response status {status}")
         # print(body)
         self.assertEqual(OK, status)
         self.assertEqual(
@@ -60,6 +60,6 @@ class TestConsumerMapping(unittest.TestCase):
     @authenticate()
     @call_api()
     def test_map_consumer_not_found(self, status, body):
-        print(f"response status {status}")
+        # print(f"response status {status}")
         # print(body)
         self.assertEqual(OK, status)

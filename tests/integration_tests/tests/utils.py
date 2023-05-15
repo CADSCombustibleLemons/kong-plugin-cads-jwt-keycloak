@@ -141,13 +141,13 @@ def call_api(token=None, method="get", params=None, endpoint=None):
 def create_client(client_id, **kwargs):
     id = str(uuid.uuid4())
 
-    print(f"id: {id}")
+    # print(f"id: {id}")
     if client_id is None:
         client_id = str(uuid.uuid4())
 
-    print(f"client_id: {client_id}")
-    print(f"create_consumer: {kwargs.get('create_consumer')}")
-    print(f"KC_ADMIN_TOKEN: {KC_ADMIN_TOKEN}")
+    # print(f"client_id: {client_id}")
+    # print(f"create_consumer: {kwargs.get('create_consumer')}")
+    # print(f"KC_ADMIN_TOKEN: {KC_ADMIN_TOKEN}")
     if kwargs.get("create_consumer"):
         client_id = create_consumer(client_id, **kwargs)
     client_secret = str(uuid.uuid4())
@@ -165,7 +165,7 @@ def create_client(client_id, **kwargs):
             "enabled": True,
         },
     )
-    print(f"create client status code: {r.status_code}")
+    # print(f"create client status code: {r.status_code}")
     assert r.status_code == 201
 
     r = requests.post(
