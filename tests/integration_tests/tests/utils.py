@@ -139,7 +139,7 @@ def create_client(client_id, **kwargs):
                           'publicClient': False,
                           'enabled': True
                       })
-
+    print(r.text)
     assert r.status_code == 201
 
     r = requests.post(KC_HOST + "/admin/realms/master/clients/" + id + '/roles',
