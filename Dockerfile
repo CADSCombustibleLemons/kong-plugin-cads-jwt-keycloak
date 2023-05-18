@@ -1,6 +1,6 @@
 ## Build plugin
 ARG KONG_VERSION
-FROM kong:${KONG_VERSION} as builder
+FROM kong:${KONG_VERSION}-alpine as builder
 
 # Root needed to install dependencies
 USER root
@@ -15,7 +15,7 @@ ARG PLUGIN_VERSION
 RUN luarocks make && luarocks pack kong-plugin-cads-jwt-keycloak ${PLUGIN_VERSION}
 
 ## Create Image
-FROM kong:${KONG_VERSION}
+FROM kong:${KONG_VERSION}-alpine
 
 ENV KONG_PLUGINS="bundled,jwt-keycloak"
 

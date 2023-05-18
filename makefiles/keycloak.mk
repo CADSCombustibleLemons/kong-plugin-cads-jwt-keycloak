@@ -9,7 +9,6 @@ keycloak-start:
 	-- @docker start ${KEYCLOAK_CONTAINER_NAME} || docker run \
 	--name ${KEYCLOAK_CONTAINER_NAME} \
 	-p ${KEYCLOAK_PORT}:8080 \
-	-p 8081:8081 \
 	-e KEYCLOAK_USER=${KEYCLOAK_ADMIN_USER} \
 	-e KEYCLOAK_PASSWORD=${KEYCLOAK_ADMIN_PASS} \
 	${KEYCLOAK_IMAGE}

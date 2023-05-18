@@ -2,7 +2,7 @@ include makefiles/*.mk
 
 IMAGE?=kong-plugin-jwt-keycloak
 KONG_VERSION?=3.0.1
-FULL_IMAGE_NAME:=${IMAGE}:${KONG_VERSION}
+FULL_IMAGE_NAME:=${IMAGE}:${KONG_VERSION}-alpine
 
 PLUGIN_VERSION?=1.5.0-1
 

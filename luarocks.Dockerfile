@@ -1,4 +1,4 @@
-FROM kong:3.0.1 as builder
+FROM kong:3.0.1-alpine as builder
 
 USER root
 
@@ -9,7 +9,7 @@ RUN apk add --no-cache git zip && \
     luarocks install ${LUAROCKS_MODULE} && \
     luarocks pack ${LUAROCKS_MODULE}
 
-FROM kong:3.0.1
+FROM kong:3.0.1-alpine
 
 USER root
 
