@@ -91,10 +91,6 @@ local function retrieve_token(conf)
     end
 end
 
-function JwtKeycloakHandler:new()
-    JwtKeycloakHandler.super.new(self, "jwt-keycloak")
-end
-
 local function get_keys(well_known_endpoint)
     kong.log.debug('Getting public keys from keycloak')
     local keys, err = keycloak_keys.get_issuer_keys(well_known_endpoint)

@@ -5,6 +5,7 @@ KONG_VERSION?=3.0.1
 FULL_IMAGE_NAME:=${IMAGE}:${KONG_VERSION}-alpine
 
 PLUGIN_VERSION?=1.5.0-1
+PLUGIN_NAME?=kong-plugin-cads-jwt-keycloak
 
 TEST_VERSIONS?=3.0.1
 
@@ -22,8 +23,12 @@ exec: build
 
 ### LuaRocks ###
 
+lua-build:
+	@luarocks make ;\
+	luarocks pack ${PLUGIN_NAME} ${PLUGIN_VERSION}
+
 upload:
-	luarocks upload kong-plugin-cads-jwt-keycloak-${PLUGIN_VERSION}.rockspec --api-key=${API_KEY}
+	luarocks upload ${PLUGIN_NAME}-${PLUGIN_VERSION}.rockspec --api-key=${API_KEY}
 
 ### Testing ###
 
