@@ -1,4 +1,3 @@
-local BasePlugin = require "kong.plugins.base_plugin"
 local constants = require "kong.constants"
 local jwt_decoder = require "kong.plugins.jwt.jwt_parser"
 local socket = require "socket"
@@ -12,8 +11,6 @@ local validate_client_roles = require("kong.plugins.jwt-keycloak.validators.role
 
 local re_gmatch = ngx.re.gmatch
 
-local JwtKeycloakHandler = BasePlugin:extend()
-
 local priority_env_var = "JWT_KEYCLOAK_PRIORITY"
 local priority
 if os.getenv(priority_env_var) then
@@ -23,8 +20,10 @@ else
 end
 kong.log.debug('JWT_KEYCLOAK_PRIORITY: ' .. priority)
 
-JwtKeycloakHandler.PRIORITY = priority
-JwtKeycloakHandler.VERSION = "1.4.0"
+local JwtKeycloakHandler = {
+    PRIORITY = priority,
+    VERSION = "1.5.0"
+}
 
 local function table_to_string(tbl)
     local result = ""
@@ -92,10 +91,6 @@ local function retrieve_token(conf)
     end
 end
 
-function JwtKeycloakHandler:new()
-    JwtKeycloakHandler.super.new(self, "jwt-keycloak")
-end
-
 local function get_keys(well_known_endpoint)
     kong.log.debug('Getting public keys from keycloak')
     local keys, err = keycloak_keys.get_issuer_keys(well_known_endpoint)
@@ -107,7 +102,7 @@ local function get_keys(well_known_endpoint)
     for i, key in ipairs(keys) do
         decoded_keys[i] = jwt_decoder:base64_decode(key)
     end
-    
+
     kong.log.debug('Number of keys retrieved: ' .. table.getn(decoded_keys))
     return {
         keys = decoded_keys,
@@ -199,15 +194,15 @@ local function set_consumer(consumer, credential, token)
         ngx.ctx.authenticated_jwt_token = token  -- backward compatibilty only
 
         if credential.username then
-            set_header(constants.HEADERS.CREDENTIAL_USERNAME, credential.username)
+            set_header(constants.HEADERS.CREDENTIAL_IDENTIFIER, credential.username)
         else
-            clear_header(constants.HEADERS.CREDENTIAL_USERNAME)
+            clear_header(constants.HEADERS.CREDENTIAL_IDENTIFIER)
         end
 
         clear_header(constants.HEADERS.ANONYMOUS)
 
     else
-        clear_header(constants.HEADERS.CREDENTIAL_USERNAME)
+        clear_header(constants.HEADERS.CREDENTIAL_IDENTIFIER)
         set_header(constants.HEADERS.ANONYMOUS, true)
     end
 end
@@ -216,7 +211,7 @@ local function match_consumer(conf, jwt)
     local consumer, err, consumer_cache_key
     local consumer_id = jwt.claims[conf.consumer_match_claim]
 
-    if conf.consumer_match_claim_custom_id then        
+    if conf.consumer_match_claim_custom_id then
         kong.log.debug('Matching Consumer: ' .. consumer_id)
         -- consumer_cache_key = "custom_id_key_" .. consumer_id
         -- consumer, err = kong.cache:get(consumer_cache_key, {ttl = 60}, load_consumer_by_custom_id, consumer_id, true)
@@ -334,8 +329,6 @@ end
 
 
 function JwtKeycloakHandler:access(conf)
-    JwtKeycloakHandler.super.access(self)
-
     -- check if preflight request and whether it should be authenticated
     if not conf.run_on_preflight and kong.request.get_method() == "OPTIONS" then
         return

@@ -14,4 +14,9 @@ _build-inte-test-image:
 	@docker build -q -t ${INTE_TEST_IMAGE} -f integration_tests/Dockerfile ..
 
 _tests-integration: _build-inte-test-image
-	@docker run -it --rm --net=host -v ${PWD}/integration_tests/tests:/tests:ro ${INTE_TEST_IMAGE} python -m unittest discover -s /tests -t /tests -p *.py -v
+	@set -e; \
+	docker run -it --rm --net=host -v ${PWD}/integration_tests/tests:/tests:ro ${INTE_TEST_IMAGE} python -m unittest /tests/TestBasics.py -v ;\
+	docker run -it --rm --net=host -v ${PWD}/integration_tests/tests:/tests:ro ${INTE_TEST_IMAGE} python -m unittest /tests/TestConsumerMapping.py -v ;\
+	docker run -it --rm --net=host -v ${PWD}/integration_tests/tests:/tests:ro ${INTE_TEST_IMAGE} python -m unittest /tests/TestIssuers.py -v ;\
+	docker run -it --rm --net=host -v ${PWD}/integration_tests/tests:/tests:ro ${INTE_TEST_IMAGE} python -m unittest /tests/TestKeyRotation.py -v ;\
+	docker run -it --rm --net=host -v ${PWD}/integration_tests/tests:/tests:ro ${INTE_TEST_IMAGE} python -m unittest /tests/TestRoles.py -v

@@ -9,7 +9,7 @@ KONG_DB_PASS:=kong
 KONG_DB_NAME:=kong
 KONG_DATABASE?=postgres
 
-POSTGRES_IMAGE:=postgres:11.2-alpine
+POSTGRES_IMAGE:=postgres:12.13-alpine
 CASSANDRA_IMAGE:=cassandra:3.11
 
 wait-for-log:
