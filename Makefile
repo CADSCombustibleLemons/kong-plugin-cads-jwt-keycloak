@@ -35,6 +35,13 @@ local-install: lua-build
 
 ### Testing ###
 
+local-run: local-install
+	@kong stop ;\
+	kong start
+
+local-logs:
+	tail -f /var/log/kong/error.log | grep handler.lua
+
 start: kong-db-start kong-start
 restart: kong-stop kong-start
 restart-all: stop start
