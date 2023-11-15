@@ -1,13 +1,13 @@
 include makefiles/*.mk
 
 IMAGE?=kong-plugin-jwt-keycloak
-KONG_VERSION?=3.0.1
+KONG_VERSION?=3.2.2
 FULL_IMAGE_NAME:=${IMAGE}:${KONG_VERSION}-alpine
 
-PLUGIN_VERSION?=1.5.0-1
+PLUGIN_VERSION?=1.6.0-1
 PLUGIN_NAME?=kong-plugin-cads-jwt-keycloak
 
-TEST_VERSIONS?=3.0.1
+TEST_VERSIONS?=3.2.2
 
 ### Docker ###
 
@@ -29,6 +29,9 @@ lua-build:
 
 upload:
 	luarocks upload ${PLUGIN_NAME}-${PLUGIN_VERSION}.rockspec --api-key=${API_KEY}
+
+local-install: lua-build
+	luarocks install ${PLUGIN_NAME}-${PLUGIN_VERSION}.all.rock
 
 ### Testing ###
 
