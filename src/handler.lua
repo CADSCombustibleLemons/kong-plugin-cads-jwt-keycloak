@@ -29,26 +29,22 @@ local function get_consumer_custom_id_cache_key(custom_id)
     return "custom_id_key_" .. custom_id
 end
   
-local function invalidate_customer_update(data)
+local function invalidate_custom_id_cache(data)
+    local customer
     if data.entity.custom_id ~= data.old_entity.custom_id then
-        local customer = data.old_entity
-        kong.log.debug("Invalidating cache for updated consumer " .. customer.username)
-        local key = get_consumer_custom_id_cache_key(customer.custom_id)
-        kong.cache:invalidate(key)
+        customer = data.old_entity
+    else
+        customer = data.entity
     end
-end
-
-local function invalidate_customer(data)
-    local customer = data.entity
-    kong.log.debug("Invalidating cache for deleted consumer " .. customer.username)
-    local key get_consumer_custom_id_cache_key(customer.custom_id)
+    kong.log.debug("Invalidating custom_id cache for consumer " .. customer.username)
+    local key = get_consumer_custom_id_cache_key(customer.custom_id)
     kong.cache:invalidate(key)
 end
-  
+
 function JwtKeycloakHandler:init_worker()
 
-    kong.worker_events.register(invalidate_customer_update, "crud", "consumers:update")
-    kong.worker_events.register(invalidate_customer_delete, "crud", "consumers:delete")
+    kong.worker_events.register(invalidate_custom_id_cache, "crud", "consumers:update")
+    kong.worker_events.register(invalidate_custom_id_cache, "crud", "consumers:delete")
   
     -- kong.cluster_events:subscribe("invalidations", function(data)
     --     kong.log.debug("Here Event")
@@ -246,7 +242,6 @@ local function match_consumer(conf, jwt)
         consumer_cache_key = get_consumer_custom_id_cache_key(consumer_id)
         consumer, err = kong.cache:get(consumer_cache_key, nil, load_consumer_by_custom_id, consumer_id, true)
         if err ~= nil then kong.cache:invalidate(consumer_cache_key) end
-        kong.log.debug('Consumer ' .. consumer_id .. ' match to ' .. consumer.username)
     else
         consumer_cache_key = kong.db.consumers:cache_key(consumer_id)
         consumer, err = kong.cache:get(consumer_cache_key, nil, load_consumer, consumer_id, true)
@@ -261,6 +256,7 @@ local function match_consumer(conf, jwt)
     end
 
     if consumer then
+        kong.log.debug('Consumer ' .. consumer_id .. ' match to ' .. consumer.username)
         set_consumer(consumer, nil, nil)
     end
 
