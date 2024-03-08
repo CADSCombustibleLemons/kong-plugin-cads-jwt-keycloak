@@ -12,7 +12,7 @@ class TestConsumerMapping(unittest.TestCase):
     @call_api()
     def test_map_consumer(self, status, body):
         self.assertEqual(OK, status)
-        self.assertEqual(1, len([h['value'] for h in body.get('headers') if h['name'] == 'x-consumer-id']))
+        self.assertIn('x-consumer-id', body.get('headers'))
 
     @create_api({
         'allowed_iss': ['http://localhost:8080/auth/realms/master'],
@@ -23,8 +23,8 @@ class TestConsumerMapping(unittest.TestCase):
     @call_api()
     def test_map_consumer_custom_id(self, status, body):
         self.assertEqual(OK, status)
-        self.assertEqual([self.TMP_CUSTOM_ID],
-                         [h['value'] for h in body.get('headers') if h['name'] == 'x-consumer-custom-id'])
+        self.assertIn('x-consumer-custom-id', body.get('headers'))
+        self.assertIn(self.TMP_CUSTOM_ID, body.get('headers').get('x-consumer-custom-id'))
 
     @create_api({
         'allowed_iss': ['http://localhost:8080/auth/realms/master'],

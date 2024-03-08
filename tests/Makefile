@@ -19,4 +19,5 @@ _tests-integration: _build-inte-test-image
 	docker run -it --rm --net=host -v ${PWD}/integration_tests/tests:/tests:ro ${INTE_TEST_IMAGE} python -m unittest /tests/TestConsumerMapping.py -v ;\
 	docker run -it --rm --net=host -v ${PWD}/integration_tests/tests:/tests:ro ${INTE_TEST_IMAGE} python -m unittest /tests/TestIssuers.py -v ;\
 	docker run -it --rm --net=host -v ${PWD}/integration_tests/tests:/tests:ro ${INTE_TEST_IMAGE} python -m unittest /tests/TestKeyRotation.py -v ;\
-	docker run -it --rm --net=host -v ${PWD}/integration_tests/tests:/tests:ro ${INTE_TEST_IMAGE} python -m unittest /tests/TestRoles.py -v
+	docker run -it --rm --net=host -v ${PWD}/integration_tests/tests:/tests:ro ${INTE_TEST_IMAGE} python -m unittest /tests/TestRoles.py -v ;\
+	docker run -it --rm --net=host -v ${PWD}/integration_tests/tests:/tests:ro ${INTE_TEST_IMAGE} python -m unittest /tests/TestScopes.py -v

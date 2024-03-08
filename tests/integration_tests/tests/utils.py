@@ -1,3 +1,4 @@
+import json
 import random
 import time
 import unittest
@@ -70,7 +71,9 @@ def create_api(config, expected_response=CREATED):
             api_name = "test" + str(random.randint(1, 1000000))
             r = requests.post(KONG_ADMIN + "/services", data={
                 "name": api_name,
-                "url": "http://mockbin.org/headers"
+                "url": "https://postman-echo.com/get",
+                "port": "443",
+                "protocol": "https"
             })
             assert r.status_code == CREATED
             r = requests.post(KONG_ADMIN + "/services/" + api_name + "/routes", data={
@@ -110,8 +113,11 @@ def call_api(token=None, method='get', params=None, endpoint=None):
                 e = endpoint
 
             r = requests.request(method, e, params=params, headers=headers)
-            result = func(*args, r.status_code, r.json())
-            return result
+            try:
+                result = func(*args, r.status_code, r.json())
+                return result
+            except(json.decoder.JSONDecodeError):
+                result = func(*args, r.status_code, None)
 
         return wrapper
 
