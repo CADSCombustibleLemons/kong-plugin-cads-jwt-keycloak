@@ -1,6 +1,6 @@
 package = "kong-plugin-cads-jwt-keycloak"
 
-version = "1.6.0-1"
+version = "1.6.1-1"
 -- The version '0.1.0' is the source code version, the trailing '1' is the version of this rockspec.
 -- whenever the source version changes, the rockspec should be reset to 1. The rockspec version is only
 -- updated (incremented) when this file changes, but the source remains the same.

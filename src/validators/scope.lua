@@ -13,10 +13,6 @@ end
 
 local function validate_scope(scope_claim, allowed_scopes, jwt_claims)
 
-    if allowed_scopes == nil or table.getn(allowed_scopes) == 0 then
-        return true
-    end
-
     if jwt_claims == nil or jwt_claims[scope_claim] == nil then
         return nil, "Missing required scope claim"
     end
@@ -26,6 +22,10 @@ local function validate_scope(scope_claim, allowed_scopes, jwt_claims)
     -- If statment a hack to pass unit tests
     if kong then
         kong.service.request.add_header("x-consumer-scopes", claimed_scopes:sub(1,-2):gsub(" ", ","))
+    end
+
+    if allowed_scopes == nil or table.getn(allowed_scopes) == 0 then
+        return true
     end
 
     for scope in string.gmatch(claimed_scopes, "%S+") do

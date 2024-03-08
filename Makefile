@@ -4,7 +4,7 @@ IMAGE?=kong-plugin-jwt-keycloak
 KONG_VERSION?=3.2.2
 FULL_IMAGE_NAME:=${IMAGE}:${KONG_VERSION}-alpine
 
-PLUGIN_VERSION?=1.6.0-1
+PLUGIN_VERSION?=1.6.1-1
 PLUGIN_NAME?=kong-plugin-cads-jwt-keycloak
 
 TEST_VERSIONS?=3.2.2
